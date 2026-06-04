@@ -26,25 +26,21 @@ import {
   Globe,
 } from "lucide-react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface Feature {
   icon: any;
   title: string;
   desc: string;
 }
-
 interface Step {
   icon: any;
   label: string;
   num: string;
 }
-
 interface Service {
   icon: any;
   title: string;
   desc: string;
 }
-
 interface Card {
   code: string;
   account: string;
@@ -52,29 +48,18 @@ interface Card {
   iso: string;
   grad: [string, string];
 }
-
 interface RevealProps {
   children: ReactNode;
   delay?: number;
   dir?: "up" | "left" | "right";
 }
-
 interface FlagImgProps {
   iso: string;
   size?: number;
 }
-
 interface CurrencyCardProps {
   card: Card;
   style?: React.CSSProperties;
-}
-
-interface FlowStep {
-  num: string;
-  label: string;
-  sub: string;
-  icon: string;
-  color: string;
 }
 
 const NAV = ["Home", "About", "Services", "How It Works", "Contact"];
@@ -100,15 +85,6 @@ const FEATURES: Feature[] = [
     title: "Community-Powered",
     desc: "Built for everyday people.",
   },
-];
-
-const STEPS: Step[] = [
-  { icon: UserPlus, label: "Create an Account", num: "01" },
-  { icon: CreditCard, label: "Complete KYC", num: "02" },
-  { icon: Search, label: "Browse or create an FX ad", num: "03" },
-  { icon: Lock, label: "Lock NGN in escrow", num: "04" },
-  { icon: RefreshCw, label: "Exchange FX confidently", num: "05" },
-  { icon: Smile, label: "Complete your trade and smile", num: "06" },
 ];
 
 const SERVICES: Service[] = [
@@ -145,7 +121,7 @@ const CARDS: Card[] = [
   {
     code: "CAD",
     account: "CAA0958473843",
-    amount: "$56,500",
+    amount: "CA$56,500",
     iso: "ca",
     grad: ["#1e3a8a", "#1a4bbd"],
   },
@@ -157,13 +133,6 @@ const CARDS: Card[] = [
     grad: ["#1a3060", "#0f2050"],
   },
   {
-    code: "GBP",
-    account: "GBP0392847561",
-    amount: "£8,450",
-    iso: "gb",
-    grad: ["#152d5c", "#0e2040"],
-  },
-  {
     code: "EUR",
     account: "EUR0573920184",
     amount: "€9,200",
@@ -171,29 +140,14 @@ const CARDS: Card[] = [
     grad: ["#1e3a8a", "#152d6e"],
   },
   {
-    code: "GHS",
-    account: "GHS0293847102",
-    amount: "₵18,000",
-    iso: "gh",
-    grad: ["#163a1a", "#0f2d14"],
-  },
-  {
-    code: "AUD",
-    account: "AUD0482910374",
-    amount: "A$14,750",
-    iso: "au",
-    grad: ["#1a3060", "#0c2248"],
-  },
-  {
-    code: "CNY",
-    account: "CNY0847201938",
-    amount: "¥92,000",
-    iso: "cn",
-    grad: ["#3a1010", "#2a0808"],
+    code: "GBP",
+    account: "GBP0392847561",
+    amount: "£8,450",
+    iso: "gb",
+    grad: ["#152d5c", "#0e2040"],
   },
 ];
 
-// ─── Hooks ────────────────────────────────────────────────────────────────────
 function useInView(
   threshold: number = 0.12,
 ): [React.RefObject<HTMLDivElement | null>, boolean] {
@@ -236,7 +190,6 @@ function Reveal({ children, delay = 0, dir = "up" }: RevealProps) {
   );
 }
 
-// ─── Flag image — uses country-flags CDN (unpkg), emoji fallback ──────────────
 const FLAG_EMOJI = {
   ng: "🇳🇬",
   ca: "🇨🇦",
@@ -286,7 +239,6 @@ function FlagImg({ iso, size = 40 }: FlagImgProps) {
   );
 }
 
-// ─── Single currency card ──────────────────────────────────────────────────────
 function CurrencyCard({ card, style = {} }: CurrencyCardProps) {
   return (
     <div
@@ -302,7 +254,6 @@ function CurrencyCard({ card, style = {} }: CurrencyCardProps) {
         ...style,
       }}
     >
-      {/* Gloss */}
       <div
         style={{
           position: "absolute",
@@ -328,19 +279,6 @@ function CurrencyCard({ card, style = {} }: CurrencyCardProps) {
           pointerEvents: "none",
         }}
       />
-      <div
-        style={{
-          position: "absolute",
-          bottom: -35,
-          right: 15,
-          width: 65,
-          height: 65,
-          borderRadius: "50%",
-          background: "rgba(255,255,255,0.03)",
-          pointerEvents: "none",
-        }}
-      />
-      {/* Top: currency code + real flag */}
       <div
         style={{
           display: "flex",
@@ -374,7 +312,6 @@ function CurrencyCard({ card, style = {} }: CurrencyCardProps) {
         </div>
         <FlagImg iso={card.iso} size={40} />
       </div>
-      {/* Amount */}
       <div
         style={{
           fontSize: 30,
@@ -391,11 +328,9 @@ function CurrencyCard({ card, style = {} }: CurrencyCardProps) {
   );
 }
 
-// ─── Phone with animated flipping cards ───────────────────────────────────────
 function PhoneWithCards() {
   const [idx, setIdx] = useState<number>(0);
   const [flipping, setFlipping] = useState<boolean>(false);
-
   useEffect(() => {
     const t = setInterval(() => {
       setFlipping(true);
@@ -406,11 +341,10 @@ function PhoneWithCards() {
     }, 2600);
     return () => clearInterval(t);
   }, []);
-
-  const main = CARDS[idx];
-  const left = CARDS[(idx + 1) % CARDS.length];
-  const right = CARDS[(idx + 2) % CARDS.length];
-
+  const safeIdx = idx % CARDS.length;
+  const main = CARDS[safeIdx];
+  const left = CARDS[(safeIdx + 1) % CARDS.length];
+  const right = CARDS[(safeIdx + 2) % CARDS.length];
   return (
     <div
       className="phone-wrap"
@@ -421,7 +355,6 @@ function PhoneWithCards() {
         margin: "0 auto",
       }}
     >
-      {/* Phone frame behind cards */}
       <div
         style={{
           position: "absolute",
@@ -489,8 +422,6 @@ function PhoneWithCards() {
           }}
         />
       </div>
-
-      {/* Left card — desktop only */}
       <div
         className="hide-m"
         style={{
@@ -506,8 +437,6 @@ function PhoneWithCards() {
       >
         <CurrencyCard card={left} style={{ minWidth: 180 }} />
       </div>
-
-      {/* Right card — desktop only */}
       <div
         className="hide-m"
         style={{
@@ -523,8 +452,6 @@ function PhoneWithCards() {
       >
         <CurrencyCard card={right} style={{ minWidth: 190 }} />
       </div>
-
-      {/* Main flipping card — always visible */}
       <div
         style={{
           position: "absolute",
@@ -545,8 +472,6 @@ function PhoneWithCards() {
           }}
         />
       </div>
-
-      {/* Dot indicators */}
       <div
         style={{
           position: "absolute",
@@ -563,10 +488,10 @@ function PhoneWithCards() {
             key={i}
             onClick={() => setIdx(i)}
             style={{
-              width: i === idx ? 22 : 7,
+              width: i === safeIdx ? 22 : 7,
               height: 7,
               borderRadius: 99,
-              background: i === idx ? "#3b82f6" : "rgba(37,99,235,0.25)",
+              background: i === safeIdx ? "#3b82f6" : "rgba(37,99,235,0.25)",
               transition: "all 0.4s ease",
               cursor: "pointer",
             }}
@@ -577,8 +502,210 @@ function PhoneWithCards() {
   );
 }
 
-// ─── Feature card illustrations (animated SVGs per card) ─────────────────────
+// ─── Correct Google Play Icon ─────────────────────────────────────────────────
+// The real Google Play icon is a rounded play-button triangle
+// split diagonally into 4 brand colors (blue, green, yellow, red)
+function GooglePlayIcon({ size }: { size: number }) {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      width={size}
+      height={size}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient
+          id="gp1"
+          x1="8.731"
+          y1="9.219"
+          x2="19.671"
+          y2="20.159"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#00a0ff" />
+          <stop offset=".007" stopColor="#00a1ff" />
+          <stop offset=".26" stopColor="#00beff" />
+          <stop offset=".512" stopColor="#00d2ff" />
+          <stop offset=".76" stopColor="#00dfff" />
+          <stop offset="1" stopColor="#00e3ff" />
+        </linearGradient>
+        <linearGradient
+          id="gp2"
+          x1="29.813"
+          y1="24"
+          x2="3.891"
+          y2="24"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#ffe000" />
+          <stop offset=".409" stopColor="#ffbd00" />
+          <stop offset=".775" stopColor="orange" />
+          <stop offset="1" stopColor="#ff9c00" />
+        </linearGradient>
+        <linearGradient
+          id="gp3"
+          x1="21.873"
+          y1="21.585"
+          x2="5.432"
+          y2="38.026"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#ff3a44" />
+          <stop offset="1" stopColor="#c31162" />
+        </linearGradient>
+        <linearGradient
+          id="gp4"
+          x1="1.919"
+          y1="4.9"
+          x2="9.359"
+          y2="12.34"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#32a071" />
+          <stop offset=".069" stopColor="#2da771" />
+          <stop offset=".476" stopColor="#15cf74" />
+          <stop offset=".801" stopColor="#06e775" />
+          <stop offset="1" stopColor="#00f076" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#gp1)"
+        d="M7.2 1.3C6.4 2.2 6 3.5 6 5.2v37.6c0 1.7.5 3 1.3 3.9l.2.2 21.1-21.1v-.5L7.4 1.1l-.2.2z"
+      />
+      <path
+        fill="url(#gp2)"
+        d="M35.6 32.1l-7-7v-.5l7-7 .2.1 8.3 4.7c2.4 1.3 2.4 3.5 0 4.8l-8.3 4.7-.2.2z"
+      />
+      <path
+        fill="url(#gp3)"
+        d="M35.8 31.9L28.6 24.7 7.2 46.1c.8.8 2.1.9 3.5.1l25.1-14.3z"
+      />
+      <path
+        fill="url(#gp4)"
+        d="M35.8 16.1L10.7 1.8C9.3 1 8 1.1 7.2 2l21.4 21.4 7.2-7.3z"
+      />
+    </svg>
+  );
+}
 
+// ─── App Store Buttons ────────────────────────────────────────────────────────
+function AppStoreButtons({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+  const pad =
+    size === "lg" ? "13px 26px" : size === "sm" ? "9px 18px" : "11px 22px";
+  const iconSize = size === "lg" ? 28 : size === "sm" ? 20 : 24;
+  const labelSize = size === "lg" ? 18 : size === "sm" ? 13 : 16;
+  const subSize = size === "lg" ? 10 : size === "sm" ? 8 : 9;
+  const radius = size === "lg" ? 14 : 12;
+
+  const btnBase: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 10,
+    background: "#000",
+    border: "1.5px solid rgba(255,255,255,0.18)",
+    borderRadius: radius,
+    padding: pad,
+    textDecoration: "none",
+    transition: "all .25s cubic-bezier(.16,1,.3,1)",
+    boxShadow:
+      "0 4px 20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06)",
+  };
+
+  const onEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.background = "#1a1a1a";
+    e.currentTarget.style.transform = "translateY(-2px)";
+    e.currentTarget.style.boxShadow =
+      "0 8px 30px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08)";
+    e.currentTarget.style.borderColor = "rgba(255,255,255,0.28)";
+  };
+  const onLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.style.background = "#000";
+    e.currentTarget.style.transform = "none";
+    e.currentTarget.style.boxShadow =
+      "0 4px 20px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06)";
+    e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: 12,
+        justifyContent: "center",
+        flexWrap: "wrap",
+      }}
+    >
+      {/* Apple App Store */}
+      <a href="#" style={btnBase} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        <svg
+          viewBox="0 0 24 24"
+          width={iconSize}
+          height={iconSize}
+          fill="white"
+        >
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.78M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+        </svg>
+        <div
+          style={{ display: "flex", flexDirection: "column", lineHeight: 1.18 }}
+        >
+          <span
+            style={{
+              fontSize: subSize,
+              color: "rgba(255,255,255,.65)",
+              fontWeight: 400,
+              letterSpacing: ".05em",
+              textTransform: "uppercase",
+            }}
+          >
+            Download on the
+          </span>
+          <span
+            style={{
+              fontSize: labelSize,
+              color: "#fff",
+              fontWeight: 700,
+              letterSpacing: "-.01em",
+            }}
+          >
+            App Store
+          </span>
+        </div>
+      </a>
+
+      {/* Google Play Store */}
+      <a href="#" style={btnBase} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        <GooglePlayIcon size={iconSize} />
+        <div
+          style={{ display: "flex", flexDirection: "column", lineHeight: 1.18 }}
+        >
+          <span
+            style={{
+              fontSize: subSize,
+              color: "rgba(255,255,255,.65)",
+              fontWeight: 400,
+              letterSpacing: ".05em",
+              textTransform: "uppercase",
+            }}
+          >
+            GET IT ON
+          </span>
+          <span
+            style={{
+              fontSize: labelSize,
+              color: "#fff",
+              fontWeight: 700,
+              letterSpacing: "-.01em",
+            }}
+          >
+            Google Play
+          </span>
+        </div>
+      </a>
+    </div>
+  );
+}
+
+// ─── Feature card illustrations ───────────────────────────────────────────────
 function IllustrationEscrow() {
   return (
     <svg
@@ -587,13 +714,7 @@ function IllustrationEscrow() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes vaultPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
-        @keyframes lockBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-3px)}60%{transform:translateY(1px)}}
-        @keyframes shieldGlow{0%,100%{filter:drop-shadow(0 0 3px #3b82f6)}50%{filter:drop-shadow(0 0 9px #3b82f6)}}
-        @keyframes coinFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-      `}</style>
-      {/* Vault body */}
+      <style>{`@keyframes vaultPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}@keyframes lockBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-3px)}60%{transform:translateY(1px)}}@keyframes coinFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`}</style>
       <g style={{ animation: "vaultPulse 3s ease-in-out infinite" }}>
         <rect
           x="30"
@@ -616,7 +737,6 @@ function IllustrationEscrow() {
           strokeWidth=".5"
           opacity=".5"
         />
-        {/* Dial */}
         <circle
           cx="60"
           cy="44"
@@ -644,7 +764,6 @@ function IllustrationEscrow() {
           strokeWidth="1.5"
           strokeLinecap="round"
         />
-        {/* Handle */}
         <rect
           x="76"
           y="40"
@@ -655,7 +774,6 @@ function IllustrationEscrow() {
           stroke="#3b82f6"
           strokeWidth="1.2"
         />
-        {/* Bolts */}
         {[
           [37, 26],
           [79, 26],
@@ -674,7 +792,6 @@ function IllustrationEscrow() {
           />
         ))}
       </g>
-      {/* NGN coins floating */}
       <g style={{ animation: "coinFloat 2.5s ease-in-out infinite" }}>
         <circle
           cx="16"
@@ -715,7 +832,6 @@ function IllustrationEscrow() {
           ₦
         </text>
       </g>
-      {/* Lock icon top */}
       <g
         style={{
           animation: "lockBounce 2.5s ease-in-out infinite",
@@ -743,13 +859,7 @@ function IllustrationRates() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes chartGrow{0%{stroke-dashoffset:200}100%{stroke-dashoffset:0}}
-        @keyframes dotPop{0%,100%{r:3;opacity:.6}50%{r:5;opacity:1}}
-        @keyframes lockPop{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-        @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-40px)}}
-      `}</style>
-      {/* Chart background */}
+      <style>{`@keyframes chartGrow{0%{stroke-dashoffset:200}100%{stroke-dashoffset:0}}@keyframes dotPop{0%,100%{r:3;opacity:.6}50%{r:5;opacity:1}}@keyframes lockPop{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}`}</style>
       <rect
         x="10"
         y="12"
@@ -760,7 +870,6 @@ function IllustrationRates() {
         stroke="#1e3a8a"
         strokeWidth="1"
       />
-      {/* Grid lines */}
       {[28, 40, 52, 64].map((y, i) => (
         <line
           key={i}
@@ -773,7 +882,6 @@ function IllustrationRates() {
           opacity=".7"
         />
       ))}
-      {/* Chart line — animated draw */}
       <path
         d="M18 62 L35 50 L50 54 L65 36 L80 40 L95 24"
         stroke="#3b82f6"
@@ -784,7 +892,6 @@ function IllustrationRates() {
         strokeDasharray="200"
         style={{ animation: "chartGrow 2.5s ease forwards" }}
       />
-      {/* Fill under line */}
       <path
         d="M18 62 L35 50 L50 54 L65 36 L80 40 L95 24 L95 72 L18 72Z"
         fill="url(#cg)"
@@ -796,7 +903,6 @@ function IllustrationRates() {
           <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
         </linearGradient>
       </defs>
-      {/* Dots on line */}
       {[
         [35, 50],
         [65, 36],
@@ -811,7 +917,6 @@ function IllustrationRates() {
           style={{ animation: `dotPop 2s ease-in-out infinite ${i * 0.4}s` }}
         />
       ))}
-      {/* Lock badge — rate locked */}
       <g
         style={{
           animation: "lockPop 2s ease-in-out infinite",
@@ -827,7 +932,6 @@ function IllustrationRates() {
           fill="none"
         />
       </g>
-      {/* Label */}
       <rect x="20" y="18" width="32" height="10" rx="3" fill="#1e3a8a" />
       <text
         x="36"
@@ -851,12 +955,7 @@ function IllustrationMarketplace() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes clockTick{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-        @keyframes adFade{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
-        @keyframes badgePop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-      `}</style>
-      {/* Clock face */}
+      <style>{`@keyframes clockTick{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}@keyframes adFade{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}@keyframes badgePop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}`}</style>
       <circle
         cx="38"
         cy="45"
@@ -875,7 +974,6 @@ function IllustrationMarketplace() {
         opacity=".5"
       />
       <circle cx="38" cy="45" r="2.5" fill="#3b82f6" />
-      {/* Hour hand */}
       <line
         x1="38"
         y1="45"
@@ -885,7 +983,6 @@ function IllustrationMarketplace() {
         strokeWidth="2"
         strokeLinecap="round"
       />
-      {/* Minute hand — spinning */}
       <line
         x1="38"
         y1="45"
@@ -899,7 +996,6 @@ function IllustrationMarketplace() {
           transformOrigin: "38px 45px",
         }}
       />
-      {/* 24h badge */}
       <g style={{ animation: "badgePop 2s ease-in-out infinite" }}>
         <rect x="22" y="14" width="32" height="13" rx="6" fill="#2563EB" />
         <text
@@ -913,7 +1009,6 @@ function IllustrationMarketplace() {
           24H
         </text>
       </g>
-      {/* Ad cards stacking */}
       {[0, 1, 2].map((i) => (
         <g
           key={i}
@@ -969,12 +1064,7 @@ function IllustrationCommunity() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes personPop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.05)}}
-        @keyframes connLine{0%,100%{opacity:.3}50%{opacity:.9}}
-        @keyframes badge2Pop{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-      `}</style>
-      {/* Connection lines */}
+      <style>{`@keyframes personPop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.05)}}@keyframes connLine{0%,100%{opacity:.3}50%{opacity:.9}}@keyframes badge2Pop{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}`}</style>
       {[
         [60, 45, 25, 25],
         [60, 45, 95, 25],
@@ -994,7 +1084,6 @@ function IllustrationCommunity() {
           style={{ animation: `connLine 2s ease-in-out infinite ${i * 0.3}s` }}
         />
       ))}
-      {/* Center person */}
       <g
         style={{
           animation: "personPop 2.5s ease-in-out infinite",
@@ -1010,7 +1099,6 @@ function IllustrationCommunity() {
           fill="none"
         />
       </g>
-      {/* Surrounding people */}
       {[
         [25, 25],
         [95, 25],
@@ -1043,7 +1131,6 @@ function IllustrationCommunity() {
           />
         </g>
       ))}
-      {/* "People" badge */}
       <g style={{ animation: "badge2Pop 2s ease-in-out infinite .5s" }}>
         <rect x="38" y="72" width="44" height="14" rx="7" fill="#2563EB" />
         <text
@@ -1068,8 +1155,6 @@ const FEATURE_ILLUSTRATIONS = [
   IllustrationCommunity,
 ];
 
-// ─── Service SVG illustrations ────────────────────────────────────────────────
-
 function SvcIllustrationP2P() {
   return (
     <svg
@@ -1078,13 +1163,7 @@ function SvcIllustrationP2P() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes p2pFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-        @keyframes p2pArrow{0%{stroke-dashoffset:60}100%{stroke-dashoffset:0}}
-        @keyframes p2pGlow{0%,100%{opacity:.4}50%{opacity:1}}
-        @keyframes p2pCoinSpin{0%{transform:rotateY(0deg)}100%{transform:rotateY(360deg)}}
-      `}</style>
-      {/* Left person */}
+      <style>{`@keyframes p2pFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes p2pArrow{0%{stroke-dashoffset:60}100%{stroke-dashoffset:0}}`}</style>
       <g style={{ animation: "p2pFloat 3s ease-in-out infinite" }}>
         <circle
           cx="36"
@@ -1102,7 +1181,6 @@ function SvcIllustrationP2P() {
           fill="none"
           opacity=".9"
         />
-        {/* NGN tag */}
         <rect x="18" y="66" width="36" height="14" rx="7" fill="#1e3a8a" />
         <text
           x="36"
@@ -1115,7 +1193,6 @@ function SvcIllustrationP2P() {
           ₦ NGN
         </text>
       </g>
-      {/* Right person */}
       <g style={{ animation: "p2pFloat 3s ease-in-out infinite .7s" }}>
         <circle
           cx="164"
@@ -1133,7 +1210,6 @@ function SvcIllustrationP2P() {
           fill="none"
           opacity=".9"
         />
-        {/* USD tag */}
         <rect x="146" y="66" width="36" height="14" rx="7" fill="#0c2d5e" />
         <text
           x="164"
@@ -1146,7 +1222,6 @@ function SvcIllustrationP2P() {
           $ USD
         </text>
       </g>
-      {/* Animated arrows */}
       <path
         d="M62 36 Q100 20 138 36"
         stroke="#3b82f6"
@@ -1165,7 +1240,6 @@ function SvcIllustrationP2P() {
         style={{ animation: "p2pArrow 1.8s ease-in-out infinite .9s" }}
         markerEnd="url(#arr2)"
       />
-      {/* Center lock */}
       <rect
         x="88"
         y="38"
@@ -1192,7 +1266,6 @@ function SvcIllustrationP2P() {
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      {/* "NO MIDDLEMEN" badge */}
       <rect
         x="58"
         y="96"
@@ -1262,13 +1335,7 @@ function SvcIllustrationEscrow() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes escShield{0%,100%{filter:drop-shadow(0 0 4px #3b82f6)}50%{filter:drop-shadow(0 0 14px #3b82f6)}}
-        @keyframes escCoin{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.05)}}
-        @keyframes escBar{from{width:0}to{width:70%}}
-        @keyframes escPulse{0%,100%{r:14}50%{r:17}}
-      `}</style>
-      {/* Shield */}
+      <style>{`@keyframes escShield{0%,100%{filter:drop-shadow(0 0 4px #3b82f6)}50%{filter:drop-shadow(0 0 14px #3b82f6)}}@keyframes escCoin{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.05)}}`}</style>
       <g
         style={{
           animation: "escShield 2.5s ease-in-out infinite",
@@ -1297,7 +1364,6 @@ function SvcIllustrationEscrow() {
           strokeLinejoin="round"
         />
       </g>
-      {/* NGN coin floating in */}
       <g style={{ animation: "escCoin 2.8s ease-in-out infinite" }}>
         <circle
           cx="44"
@@ -1318,16 +1384,6 @@ function SvcIllustrationEscrow() {
           ₦
         </text>
       </g>
-      {/* Arrow to shield */}
-      <path
-        d="M62 52 L70 52"
-        stroke="#3b82f6"
-        strokeWidth="1.5"
-        strokeDasharray="4 2"
-        style={{ animation: "escBar 1.5s ease-in-out infinite alternate" }}
-        markerEnd="url(#escArr)"
-      />
-      {/* Locked badge */}
       <rect
         x="64"
         y="90"
@@ -1349,7 +1405,6 @@ function SvcIllustrationEscrow() {
       >
         ● NGN LOCKED SAFE
       </text>
-      {/* Right: FX waiting */}
       <g style={{ animation: "escCoin 2.8s ease-in-out infinite .5s" }}>
         <circle
           cx="156"
@@ -1370,32 +1425,6 @@ function SvcIllustrationEscrow() {
           $
         </text>
       </g>
-      <path
-        d="M130 52 L140 52"
-        stroke="#38bdf8"
-        strokeWidth="1.5"
-        strokeDasharray="4 2"
-        opacity=".5"
-      />
-      <defs>
-        <marker
-          id="escArr"
-          viewBox="0 0 8 8"
-          refX="6"
-          refY="4"
-          markerWidth="4"
-          markerHeight="4"
-          orient="auto"
-        >
-          <path
-            d="M1 1l5 3-5 3"
-            stroke="#3b82f6"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-          />
-        </marker>
-      </defs>
     </svg>
   );
 }
@@ -1408,13 +1437,7 @@ function SvcIllustrationWallet() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes walletFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-        @keyframes walletBalance{0%,40%{opacity:0;transform:translateY(4px)}50%,100%{opacity:1;transform:none}}
-        @keyframes walletBar{0%{width:0}60%{width:55%}100%{width:55%}}
-        @keyframes walletPing{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.8);opacity:0}}
-      `}</style>
-      {/* Wallet card */}
+      <style>{`@keyframes walletFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes walletBalance{0%,40%{opacity:0;transform:translateY(4px)}50%,100%{opacity:1;transform:none}}@keyframes walletPing{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.8);opacity:0}}`}</style>
       <g style={{ animation: "walletFloat 4s ease-in-out infinite" }}>
         <rect
           x="30"
@@ -1444,7 +1467,6 @@ function SvcIllustrationWallet() {
           fill="#1e3a8a"
           opacity=".5"
         />
-        {/* Card chip */}
         <rect
           x="44"
           y="28"
@@ -1454,17 +1476,6 @@ function SvcIllustrationWallet() {
           fill="#2563EB"
           opacity=".7"
         />
-        <rect
-          x="44"
-          y="28"
-          width="22"
-          height="16"
-          rx="4"
-          fill="none"
-          stroke="#60a5fa"
-          strokeWidth=".5"
-        />
-        {/* BCDees label */}
         <text
           x="168"
           y="40"
@@ -1476,7 +1487,6 @@ function SvcIllustrationWallet() {
         >
           BCDEES
         </text>
-        {/* Balance */}
         <text
           x="44"
           y="66"
@@ -1497,7 +1507,6 @@ function SvcIllustrationWallet() {
         >
           ₦2,450,000
         </text>
-        {/* Contactless symbol */}
         {[8, 13, 18].map((r, i) => (
           <path
             key={i}
@@ -1509,7 +1518,6 @@ function SvcIllustrationWallet() {
           />
         ))}
       </g>
-      {/* Live dot */}
       <circle cx="164" cy="26" r="5" fill="#22c55e" opacity=".8" />
       <circle
         cx="164"
@@ -1543,13 +1551,7 @@ function SvcIllustrationSupport() {
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "100%", height: "100%" }}
     >
-      <style>{`
-        @keyframes suppFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-        @keyframes suppTyping{0%,100%{opacity:.3}33%{opacity:1}66%{opacity:.6}}
-        @keyframes suppMsg{0%{opacity:0;transform:translateY(6px)}20%,80%{opacity:1;transform:none}100%{opacity:0}}
-        @keyframes suppPing{0%{r:8;opacity:.5}100%{r:16;opacity:0}}
-      `}</style>
-      {/* Headset icon center */}
+      <style>{`@keyframes suppFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes suppTyping{0%,100%{opacity:.3}33%{opacity:1}66%{opacity:.6}}@keyframes suppMsg{0%{opacity:0;transform:translateY(6px)}20%,80%{opacity:1;transform:none}100%{opacity:0}}@keyframes suppPing{0%{r:8;opacity:.5}100%{r:16;opacity:0}}`}</style>
       <g
         style={{
           animation: "suppFloat 4s ease-in-out infinite",
@@ -1564,8 +1566,6 @@ function SvcIllustrationSupport() {
           stroke="#3b82f6"
           strokeWidth="1.2"
         />
-        <circle cx="100" cy="55" r="32" fill="#3b82f6" opacity=".04" />
-        {/* Headphone arc */}
         <path
           d="M82 55 A18 18 0 0 1 118 55"
           stroke="#60a5fa"
@@ -1573,10 +1573,8 @@ function SvcIllustrationSupport() {
           fill="none"
           strokeLinecap="round"
         />
-        {/* Ear cups */}
         <rect x="78" y="53" width="8" height="14" rx="4" fill="#2563EB" />
         <rect x="114" y="53" width="8" height="14" rx="4" fill="#2563EB" />
-        {/* Mic */}
         <path
           d="M100 67 L100 73"
           stroke="#60a5fa"
@@ -1590,7 +1588,6 @@ function SvcIllustrationSupport() {
           strokeLinecap="round"
         />
       </g>
-      {/* Pulse ring */}
       <circle
         cx="100"
         cy="55"
@@ -1600,7 +1597,6 @@ function SvcIllustrationSupport() {
         strokeWidth="1"
         style={{ animation: "suppPing 2s ease-out infinite" }}
       />
-      {/* Chat bubbles */}
       <g style={{ animation: "suppMsg 3s ease-in-out infinite" }}>
         <rect
           x="16"
@@ -1647,7 +1643,6 @@ function SvcIllustrationSupport() {
         </text>
         <path d="M172 40 L176 46 L164 40" fill="#0c2d5e" />
       </g>
-      {/* Typing dots */}
       <g style={{ transform: "translate(30,90)" }}>
         <rect x="0" y="0" width="44" height="16" rx="8" fill="#1e3a8a" />
         {[6, 14, 22].map((x, i) => (
@@ -1663,7 +1658,6 @@ function SvcIllustrationSupport() {
           />
         ))}
       </g>
-      {/* "24/7 SUPPORT" badge */}
       <rect
         x="126"
         y="88"
@@ -1696,10 +1690,8 @@ const SVC_ILLUSTRATIONS = [
   SvcIllustrationSupport,
 ];
 
-// ─── Animated escrow flow visual ──────────────────────────────────────────────
 function EscrowFlowVisual() {
   const [step, setStep] = useState<number>(0);
-  // Cycle through the 4 steps using the exact content provided
   const FLOW = [
     {
       num: "01",
@@ -1730,23 +1722,13 @@ function EscrowFlowVisual() {
       color: "#22c55e",
     },
   ];
-
   useEffect(() => {
     const t = setInterval(() => setStep((p) => (p + 1) % FLOW.length), 2200);
     return () => clearInterval(t);
   }, []);
-
   return (
     <div style={{ position: "relative", width: "100%" }}>
-      <style>{`
-        @keyframes stepIn  { from { opacity:0; transform:translateY(14px) scale(.97); } to { opacity:1; transform:none; } }
-        @keyframes stepOut { from { opacity:1; transform:none; } to { opacity:0; transform:translateY(-10px) scale(.97); } }
-        @keyframes pulseBlue { 0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.5)} 50%{box-shadow:0 0 0 10px rgba(37,99,235,0)} }
-        @keyframes lineGrow { from{width:0} to{width:100%} }
-        @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-      `}</style>
-
-      {/* Main active step card */}
+      <style>{`@keyframes stepIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}@keyframes pulseBlue{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.5)}50%{box-shadow:0 0 0 10px rgba(37,99,235,0)}}@keyframes lineGrow{from{width:0}to{width:100%}}@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}`}</style>
       <div
         key={step}
         style={{
@@ -1759,7 +1741,6 @@ function EscrowFlowVisual() {
           boxShadow: `0 0 0 1px ${FLOW[step].color}22, 0 16px 40px rgba(0,0,0,.3)`,
         }}
       >
-        {/* Step number + icon */}
         <div
           style={{
             display: "flex",
@@ -1772,7 +1753,7 @@ function EscrowFlowVisual() {
             style={{
               fontSize: 11,
               fontWeight: 800,
-              color: `${FLOW[step].color}`,
+              color: FLOW[step].color,
               letterSpacing: ".1em",
             }}
           >
@@ -1815,7 +1796,6 @@ function EscrowFlowVisual() {
         >
           {FLOW[step].sub}
         </p>
-        {/* Animated progress bar */}
         <div
           style={{
             marginTop: 20,
@@ -1836,8 +1816,6 @@ function EscrowFlowVisual() {
           />
         </div>
       </div>
-
-      {/* Step dots row */}
       <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
         {FLOW.map((f, i) => (
           <button
@@ -1867,8 +1845,6 @@ function EscrowFlowVisual() {
           </button>
         ))}
       </div>
-
-      {/* Two floating mini-stat cards */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <div
           style={{
@@ -1935,7 +1911,6 @@ function EscrowFlowVisual() {
   );
 }
 
-// ─── Main component ────────────────────────────────────────────────────────────
 export default function BCDeesLanding() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -1990,150 +1965,37 @@ export default function BCDeesLanding() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html{scroll-behavior:smooth}
-        ::-webkit-scrollbar{width:3px}
-        ::-webkit-scrollbar-track{background:#06101e}
-        ::-webkit-scrollbar-thumb{background:#2563EB;border-radius:3px}
-
+        ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:#06101e}::-webkit-scrollbar-thumb{background:#2563EB;border-radius:3px}
         .pgbar{position:fixed;top:0;left:0;z-index:200;height:2px;background:linear-gradient(90deg,#2563EB,#38bdf8);transition:width .1s;pointer-events:none}
-
-        /* ── Floating pill nav ── */
-        .nav-outer{
-          position:fixed;top:0;left:0;right:0;z-index:100;
-          display:flex;justify-content:center;
-          padding:14px 32px;
-          pointer-events:none;
-          transition:padding .4s ease;
-        }
-        .nav-outer.scrolled{ padding:10px 32px; }
-
-        .nav-pill{
-          pointer-events:all;
-          /* Shrink to fit content — same visual width as page body */
-          width:fit-content;
-          min-width:0;
-          max-width:960px;
-          height:52px;
-          display:flex;align-items:center;justify-content:space-between;gap:8px;
-          padding:0 10px;
-          border-radius:99px;
-          background:rgba(6,16,30,0.35);
-          border:1px solid rgba(255,255,255,0.07);
-          backdrop-filter:blur(20px) saturate(160%);
-          -webkit-backdrop-filter:blur(20px) saturate(160%);
-          box-shadow:0 8px 32px rgba(0,0,0,0.3), 0 0 12px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
-          transition:all .4s cubic-bezier(.16,1,.3,1);
-        }
-        .nav-outer.scrolled .nav-pill{
-          background:rgba(6,16,30,0.72);
-          border-color:rgba(37,99,235,0.22);
-          box-shadow:0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(37,99,235,0.1), inset 0 1px 0 rgba(255,255,255,0.07), 0 0 18px rgba(37,99,235,0.18);
-        }
-        @media(max-width:768px){
-          .nav-outer{ padding:10px 16px; }
-          .nav-pill{
-            width:fit-content;
-            min-width:0;
-            max-width:calc(100vw - 32px);
-            border-radius:99px;
-          }
-        }
-
-        /* Nav links */
-        .nl{
-          background:none;border:none;cursor:pointer;
-          font-family:inherit;font-size:13px;font-weight:500;
-          padding:7px 14px;border-radius:99px;
-          color:rgba(148,163,184,0.8);
-          transition:all .2s;white-space:nowrap;
-        }
-        .nl:hover{
-          background:rgba(255,255,255,0.08);
-          color:#f1f5f9;
-        }
-        .nl.on{
-          background:rgba(37,99,235,0.2);
-          color:#93c5fd;
-          box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);
-        }
-
+        .nav-outer{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:center;padding:14px 32px;pointer-events:none;transition:padding .4s ease}
+        .nav-outer.scrolled{padding:10px 32px}
+        .nav-pill{pointer-events:all;width:fit-content;min-width:0;max-width:960px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 10px;border-radius:99px;background:rgba(6,16,30,0.35);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);box-shadow:0 8px 32px rgba(0,0,0,0.3),0 0 12px rgba(37,99,235,0.12),inset 0 1px 0 rgba(255,255,255,0.06);transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .nav-outer.scrolled .nav-pill{background:rgba(6,16,30,0.72);border-color:rgba(37,99,235,0.22);box-shadow:0 12px 40px rgba(0,0,0,0.45),0 0 0 1px rgba(37,99,235,0.1),inset 0 1px 0 rgba(255,255,255,0.07),0 0 18px rgba(37,99,235,0.18)}
+        @media(max-width:768px){.nav-outer{padding:10px 16px}.nav-pill{width:fit-content;min-width:0;max-width:calc(100vw - 32px);border-radius:99px}}
+        .nl{background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;padding:7px 14px;border-radius:99px;color:rgba(148,163,184,0.8);transition:all .2s;white-space:nowrap}
+        .nl:hover{background:rgba(255,255,255,0.08);color:#f1f5f9}
+        .nl.on{background:rgba(37,99,235,0.2);color:#93c5fd;box-shadow:inset 0 1px 0 rgba(255,255,255,0.08)}
         .btn{background:#2563EB;color:#fff;border:none;padding:11px 22px;border-radius:99px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .25s;box-shadow:0 4px 14px rgba(37,99,235,.3)}
         .btn:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 8px 24px rgba(37,99,235,.4)}
-        .btn-sm{background:rgba(37,99,235,0.15);color:#93c5fd;border:1px solid rgba(37,99,235,0.3);padding:10px 22px;border-radius:99px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .25s}
-        .btn-sm:hover{background:rgba(37,99,235,0.25);color:#bfdbfe}
-
-        .sec{padding:80px 0}
-        .wrap{max-width:960px;margin:0 auto;padding:0 32px}
-
-        .fc{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px;transition:all .3s}
-        .fc:hover{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.25);transform:translateY(-3px)}
-
-        .sc{padding:32px 24px;transition:background .25s}
-        .sc:hover{background:rgba(37,99,235,.05)}
-
-        .svc{background:#06101e;padding:44px 36px;transition:background .3s}
-        .svc:hover{background:rgba(37,99,235,.05)}
-
+        .sec{padding:80px 0}.wrap{max-width:960px;margin:0 auto;padding:0 32px}
         .phone-wrap{position:relative;width:480px;height:420px;margin:0 auto}
-
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        .float-anim{animation:float 7s ease-in-out infinite}
-
-        @media(max-width:768px){
-          .wrap{padding:0 16px}
-          .hide-m{display:none!important}
-          .show-m{display:block!important}
-          [data-two]{grid-template-columns:1fr!important}
-          [data-six]{grid-template-columns:1fr 1fr!important}
-          [data-four]{grid-template-columns:1fr 1fr!important}
-          .phone-wrap{width:300px!important;height:340px!important}
-          .sec{padding:56px 0}
-          .wrap{padding:0 20px}
-        }
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}.float-anim{animation:float 7s ease-in-out infinite}
+        @media(max-width:768px){.wrap{padding:0 16px}.hide-m{display:none!important}.show-m{display:block!important}[data-two]{grid-template-columns:1fr!important}[data-six]{grid-template-columns:1fr 1fr!important}[data-four]{grid-template-columns:1fr 1fr!important}.phone-wrap{width:300px!important;height:340px!important}.sec{padding:56px 0}.wrap{padding:0 20px}}
         @media(min-width:769px){.show-m{display:none!important}}
-
-        /* ── Bottom sheet ── */
-        .bs-backdrop{
-          position:fixed;inset:0;z-index:150;
-          background:rgba(0,0,0,0.65);
-          backdrop-filter:blur(4px);
-          opacity:0;pointer-events:none;
-          transition:opacity .35s ease;
-        }
+        .bs-backdrop{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .35s ease}
         .bs-backdrop.open{opacity:1;pointer-events:all}
-        .bs-sheet{
-          position:fixed;bottom:0;left:0;right:0;z-index:160;
-          background:#0d1a2e;
-          border-radius:24px 24px 0 0;
-          border-top:1px solid rgba(37,99,235,.2);
-          padding:0 0 36px;
-          transform:translateY(100%);
-          transition:transform .42s cubic-bezier(.16,1,.3,1);
-          box-shadow:0 -24px 60px rgba(0,0,0,.55);
-        }
+        .bs-sheet{position:fixed;bottom:0;left:0;right:0;z-index:160;background:#0d1a2e;border-radius:24px 24px 0 0;border-top:1px solid rgba(37,99,235,.2);padding:0 0 36px;transform:translateY(100%);transition:transform .42s cubic-bezier(.16,1,.3,1);box-shadow:0 -24px 60px rgba(0,0,0,.55)}
         .bs-sheet.open{transform:translateY(0)}
-        .bs-handle{
-          width:40px;height:4px;border-radius:99px;
-          background:rgba(255,255,255,.15);
-          margin:14px auto 4px;
-        }
-        .bs-link{
-          display:flex;align-items:center;justify-content:space-between;
-          width:100%;background:none;border:none;cursor:pointer;
-          font-family:inherit;font-size:16px;font-weight:500;
-          color:rgba(148,163,184,.85);
-          padding:15px 24px;border-radius:0;
-          transition:all .2s;text-align:left;
-        }
-        .bs-link:active{background:rgba(37,99,235,.08)}
-        .bs-link.on{color:#60a5fa;font-weight:700}
+        .bs-handle{width:40px;height:4px;border-radius:99px;background:rgba(255,255,255,.15);margin:14px auto 4px}
+        .bs-link{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;cursor:pointer;font-family:inherit;font-size:16px;font-weight:500;color:rgba(148,163,184,.85);padding:15px 24px;border-radius:0;transition:all .2s;text-align:left}
+        .bs-link:active{background:rgba(37,99,235,.08)}.bs-link.on{color:#60a5fa;font-weight:700}
       `}</style>
 
       <div className="pgbar" style={{ width: `${scrollPct}%` }} />
 
-      {/* NAV — floating pill */}
+      {/* NAV */}
       <div className={`nav-outer${scrolled ? " scrolled" : ""}`}>
         <div className="nav-pill">
-          {/* Logo — circle container */}
           <button
             onClick={() => scrollTo("Home")}
             style={{
@@ -2142,56 +2004,45 @@ export default function BCDeesLanding() {
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
-              gap: 9,
               flexShrink: 0,
-              padding: "0 4px",
+              padding: "0",
             }}
           >
             <div
               style={{
-                width: 38,
-                height: 38,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg,#2563EB,#0ea5e9)",
+                background: "#fff",
+                borderRadius: 99,
+                padding: "4px 16px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow:
-                  "0 0 0 2px rgba(37,99,235,.3), 0 4px 14px rgba(37,99,235,.4)",
-                flexShrink: 0,
+                height: 42,
               }}
             >
               <Image
                 src="/logo.png"
                 alt="BCDees"
-                width={22}
-                height={22}
-                className="object-contain brightness-0 invert"
+                width={150}
+                height={34}
+                className="object-contain"
+                style={{ height: 34, width: "auto" }}
                 priority
               />
             </div>
-            <span
-              style={{
-                fontSize: 17,
-                fontWeight: 800,
-                letterSpacing: "-.02em",
-                lineHeight: 1,
-              }}
-            >
-              <span style={{ color: "#60a5fa" }}>BC</span>
-              <span style={{ color: "#f1f5f9" }}>Dees</span>
-            </span>
           </button>
-
-          {/* Desktop nav links — How It Works + Contact only */}
           <div
             className="hide-m"
             style={{
-              display: "flex",
-              gap: 2,
-              flex: 1,
-              justifyContent: "center",
+              width: 1,
+              height: 22,
+              background: "rgba(255,255,255,0.1)",
+              flexShrink: 0,
+              margin: "0 4px",
             }}
+          />
+          <div
+            className="hide-m"
+            style={{ display: "flex", gap: 2, justifyContent: "center" }}
           >
             {["How It Works", "Contact"].map((l) => (
               <button
@@ -2203,8 +2054,16 @@ export default function BCDeesLanding() {
               </button>
             ))}
           </div>
-
-          {/* Get Started — pill button */}
+          <div
+            className="hide-m"
+            style={{
+              width: 1,
+              height: 22,
+              background: "rgba(255,255,255,0.1)",
+              flexShrink: 0,
+              margin: "0 4px",
+            }}
+          />
           <button
             className="hide-m"
             onClick={goCTA}
@@ -2235,8 +2094,6 @@ export default function BCDeesLanding() {
           >
             Get Started
           </button>
-
-          {/* Mobile hamburger */}
           <button
             className="show-m"
             onClick={() => setMenuOpen(true)}
@@ -2259,14 +2116,13 @@ export default function BCDeesLanding() {
         </div>
       </div>
 
-      {/* ── BOTTOM SHEET (mobile menu) ── */}
+      {/* BOTTOM SHEET */}
       <div
         className={`bs-backdrop${menuOpen ? " open" : ""}`}
         onClick={() => setMenuOpen(false)}
       />
       <div className={`bs-sheet show-m${menuOpen ? " open" : ""}`}>
         <div className="bs-handle" />
-        {/* Sheet header */}
         <div
           style={{
             display: "flex",
@@ -2276,12 +2132,26 @@ export default function BCDeesLanding() {
             borderBottom: "1px solid rgba(37,99,235,.1)",
           }}
         >
-          <span
-            style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-.01em" }}
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 10,
+              padding: "2px 10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 44,
+            }}
           >
-            <span style={{ color: "#3b82f6" }}>BC</span>
-            <span style={{ color: "#f1f5f9" }}>Dees</span>
-          </span>
+            <Image
+              src="/logo.png"
+              alt="BCDees"
+              width={150}
+              height={40}
+              className="object-contain"
+              style={{ height: 40, width: "auto" }}
+            />
+          </div>
           <button
             onClick={() => setMenuOpen(false)}
             style={{
@@ -2300,7 +2170,6 @@ export default function BCDeesLanding() {
             <X size={16} />
           </button>
         </div>
-        {/* Nav links */}
         <div style={{ padding: "8px 12px" }}>
           {NAV.map((l) => (
             <button
@@ -2316,7 +2185,6 @@ export default function BCDeesLanding() {
             </button>
           ))}
         </div>
-        {/* CTA */}
         <div style={{ padding: "12px 24px 0" }}>
           <button
             className="btn"
@@ -2349,7 +2217,6 @@ export default function BCDeesLanding() {
           alignItems: "center",
         }}
       >
-        {/* Concentric arcs */}
         <svg
           style={{
             position: "absolute",
@@ -2392,8 +2259,6 @@ export default function BCDeesLanding() {
             pointerEvents: "none",
           }}
         />
-
-        {/* Headline */}
         <div
           style={{
             position: "relative",
@@ -2403,19 +2268,7 @@ export default function BCDeesLanding() {
             maxWidth: 680,
           }}
         >
-          <style>{`
-            @keyframes ampFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(4deg)}}
-            @keyframes ampGlow{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,0),0 8px 32px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 8px rgba(37,99,235,0.12),0 8px 32px rgba(0,0,0,.4)}}
-            @media(min-width:769px){
-              .amp-block{ display:none !important; }
-              .hero-desktop{ display:block !important; }
-            }
-            @media(max-width:768px){
-              .amp-block{ display:flex !important; }
-              .hero-desktop{ display:none !important; }
-            }
-          `}</style>
-
+          <style>{`@keyframes ampFloat{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(4deg)}}@keyframes ampGlow{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,0),0 8px 32px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 8px rgba(37,99,235,0.12),0 8px 32px rgba(0,0,0,.4)}}@media(min-width:769px){.amp-block{display:none!important}.hero-desktop{display:block!important}}@media(max-width:768px){.amp-block{display:flex!important}.hero-desktop{display:none!important}}`}</style>
           <div
             style={{
               opacity: heroIn ? 1 : 0,
@@ -2423,7 +2276,6 @@ export default function BCDeesLanding() {
               transition: "all .8s ease .1s",
             }}
           >
-            {/* Desktop headline — single block */}
             <h1
               className="hero-desktop"
               style={{
@@ -2439,8 +2291,6 @@ export default function BCDeesLanding() {
               <br />
               <span style={{ color: "#60a5fa" }}>Safe Way</span>
             </h1>
-
-            {/* Mobile headline — each word stacked */}
             <div
               className="amp-block"
               style={{
@@ -2462,7 +2312,6 @@ export default function BCDeesLanding() {
               >
                 Smart
               </h1>
-
               <h1
                 style={{
                   fontSize: "clamp(48px,13vw,64px)",
@@ -2475,8 +2324,6 @@ export default function BCDeesLanding() {
               >
                 Simple
               </h1>
-
-              {/* Floating & circle */}
               <div
                 style={{
                   width: 52,
@@ -2497,7 +2344,6 @@ export default function BCDeesLanding() {
               >
                 &amp;
               </div>
-
               <h1
                 style={{
                   fontSize: "clamp(48px,13vw,64px)",
@@ -2541,76 +2387,22 @@ export default function BCDeesLanding() {
               transition: "all .8s ease .38s",
             }}
           >
-            <button className="btn-sm" onClick={goCTA}>
-              Open a free account <ArrowRight size={14} />
-            </button>
+            <AppStoreButtons size="md" />
           </div>
         </div>
-
-        {/* Phone + cards */}
         <div
           className="float-anim"
           style={{
             position: "relative",
             zIndex: 2,
             marginTop: 56,
-            paddingBottom: 20,
+            paddingBottom: 60,
             opacity: heroIn ? 1 : 0,
             transform: heroIn ? "none" : "translateY(32px) scale(0.95)",
             transition: "all 1.1s ease .4s",
           }}
         >
           <PhoneWithCards />
-        </div>
-
-        {/* Stats */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            display: "flex",
-            gap: 48,
-            marginTop: 40,
-            paddingBottom: 60,
-            opacity: heroIn ? 1 : 0,
-            transition: "opacity .9s ease .7s",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          {[
-            ["10K+", "Active Traders"],
-            ["₦0", "Lost to Fraud"],
-            ["24/7", "Marketplace"],
-          ].map(([v, l]) => (
-            <div key={l} style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontSize: 28,
-                  fontWeight: 800,
-                  letterSpacing: "-.03em",
-                  background: "linear-gradient(135deg,#3b82f6,#38bdf8)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {v}
-              </div>
-              <div
-                style={{
-                  fontSize: 11,
-                  color: "rgba(148,163,184,.45)",
-                  fontWeight: 600,
-                  letterSpacing: ".08em",
-                  textTransform: "uppercase",
-                  marginTop: 4,
-                }}
-              >
-                {l}
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -2628,7 +2420,6 @@ export default function BCDeesLanding() {
                 border: "1px solid rgba(37,99,235,.1)",
               }}
             >
-              {/* Blobs */}
               <div
                 style={{
                   position: "absolute",
@@ -2658,7 +2449,6 @@ export default function BCDeesLanding() {
                   pointerEvents: "none",
                 }}
               />
-              {/* Arc lines */}
               <svg
                 style={{
                   position: "absolute",
@@ -2684,7 +2474,6 @@ export default function BCDeesLanding() {
                   />
                 ))}
               </svg>
-
               <div
                 style={{
                   display: "grid",
@@ -2696,7 +2485,6 @@ export default function BCDeesLanding() {
                 }}
                 data-two
               >
-                {/* Left — exact content from provided text */}
                 <div>
                   <h2
                     style={{
@@ -2746,8 +2534,6 @@ export default function BCDeesLanding() {
                     </strong>
                   </p>
                 </div>
-
-                {/* Right — animated escrow flow visual */}
                 <EscrowFlowVisual />
               </div>
             </div>
@@ -2829,7 +2615,6 @@ export default function BCDeesLanding() {
                       e.currentTarget.style.boxShadow = "none";
                     }}
                   >
-                    {/* Animated illustration */}
                     <div
                       style={{
                         height: 90,
@@ -2841,7 +2626,6 @@ export default function BCDeesLanding() {
                     >
                       <Illustration />
                     </div>
-                    {/* Icon badge — matches screenshot */}
                     <div
                       style={{
                         width: 44,
@@ -2895,7 +2679,6 @@ export default function BCDeesLanding() {
         }}
       >
         <div className="wrap">
-          {/* Header */}
           <Reveal>
             <div
               style={{
@@ -2944,8 +2727,6 @@ export default function BCDeesLanding() {
               </p>
             </div>
           </Reveal>
-
-          {/* 3×2 grid — matches screenshot exactly */}
           <div
             data-six
             style={{
@@ -3017,7 +2798,6 @@ export default function BCDeesLanding() {
                     (e.currentTarget.style.background = "#06101e")
                   }
                 >
-                  {/* Hover glow top-left */}
                   <div
                     style={{
                       position: "absolute",
@@ -3029,11 +2809,8 @@ export default function BCDeesLanding() {
                       background:
                         "radial-gradient(circle,rgba(37,99,235,.12),transparent 70%)",
                       pointerEvents: "none",
-                      transition: "opacity .3s",
                     }}
                   />
-
-                  {/* Step number */}
                   <p
                     style={{
                       fontSize: 13,
@@ -3046,8 +2823,6 @@ export default function BCDeesLanding() {
                   >
                     {s.num}
                   </p>
-
-                  {/* Icon badge — matches screenshot: rounded square, dark blue bg */}
                   <div
                     style={{
                       width: 56,
@@ -3064,8 +2839,6 @@ export default function BCDeesLanding() {
                   >
                     <s.icon size={24} color="#60a5fa" strokeWidth={1.6} />
                   </div>
-
-                  {/* Label */}
                   <h3
                     style={{
                       fontSize: 18,
@@ -3078,8 +2851,6 @@ export default function BCDeesLanding() {
                   >
                     {s.label}
                   </h3>
-
-                  {/* Short description */}
                   <p
                     style={{
                       fontSize: 13,
@@ -3094,55 +2865,19 @@ export default function BCDeesLanding() {
               </Reveal>
             ))}
           </div>
-
-          {/* CTA — pill button matching screenshot */}
           <Reveal delay={0.4}>
             <div style={{ textAlign: "center", marginTop: 52 }}>
-              <button
-                onClick={goCTA}
+              <p
                 style={{
-                  background: "linear-gradient(135deg,#2563EB,#1d4ed8)",
-                  color: "#fff",
-                  border: "none",
-                  padding: "16px 44px",
-                  borderRadius: 99,
-                  fontSize: 16,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  fontFamily: "inherit",
-                  boxShadow: "0 8px 32px rgba(37,99,235,.4)",
-                  transition: "all .25s",
-                  letterSpacing: "-.01em",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 12px 40px rgba(37,99,235,.5)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.boxShadow =
-                    "0 8px 32px rgba(37,99,235,.4)";
+                  fontSize: 14,
+                  color: "rgba(148,163,184,.45)",
+                  marginBottom: 20,
+                  fontWeight: 500,
                 }}
               >
-                Get Started Now
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: "50%",
-                    background: "rgba(255,255,255,.2)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <ChevronRight size={16} />
-                </div>
-              </button>
+                Available on iOS & Android
+              </p>
+              <AppStoreButtons size="lg" />
             </div>
           </Reveal>
         </div>
@@ -3157,15 +2892,7 @@ export default function BCDeesLanding() {
           overflow: "hidden",
         }}
       >
-        <style>{`
-          @keyframes meshMove{0%{transform:translate(0,0)}50%{transform:translate(12px,-8px)}100%{transform:translate(0,0)}}
-          @keyframes glowPulse{0%,100%{opacity:.4}50%{opacity:.9}}
-          @keyframes escrowSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-          @keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-          @keyframes lineReveal{from{width:0}to{width:100%}}
-        `}</style>
-
-        {/* ── TOP: Full-width headline strip ── */}
+        <style>{`@keyframes meshMove{0%{transform:translate(0,0)}50%{transform:translate(12px,-8px)}100%{transform:translate(0,0)}}@keyframes glowPulse{0%,100%{opacity:.4}50%{opacity:.9}}@keyframes shimmer{from{background-position:200% center}to{background-position:-200% center}}`}</style>
         <div
           style={{
             borderBottom: "1px solid rgba(37,99,235,.1)",
@@ -3205,7 +2932,6 @@ export default function BCDeesLanding() {
                   About BCDees
                 </span>
               </div>
-              {/* GIANT headline — full width, editorial */}
               <h2
                 style={{
                   fontSize: "clamp(36px,5.5vw,72px)",
@@ -3218,19 +2944,11 @@ export default function BCDeesLanding() {
               >
                 Built by
                 <br />
-                <span
-                  style={{
-                    color: "#60a5fa",
-                  }}
-                >
-                  community.
-                </span>
+                <span style={{ color: "#60a5fa" }}>community.</span>
               </h2>
             </Reveal>
           </div>
         </div>
-
-        {/* ── MIDDLE: Two column content ── */}
         <div className="wrap" style={{ padding: "80px 40px" }}>
           <div
             data-two
@@ -3241,7 +2959,6 @@ export default function BCDeesLanding() {
               alignItems: "start",
             }}
           >
-            {/* LEFT — Body text + 4 stats */}
             <Reveal dir="left">
               <p
                 style={{
@@ -3257,8 +2974,6 @@ export default function BCDeesLanding() {
                 simple, and stress-free currency exchange. Ours is a trusted
                 community where everyone can trade confidently.
               </p>
-
-              {/* 4 bold stat items — completely different from generic checklist */}
               <div
                 style={{
                   display: "grid",
@@ -3320,11 +3035,8 @@ export default function BCDeesLanding() {
                 ))}
               </div>
             </Reveal>
-
-            {/* RIGHT — Escrow card — completely reimagined */}
             <Reveal delay={0.15} dir="right">
               <div style={{ position: "relative" }}>
-                {/* Glowing mesh background */}
                 <div
                   style={{
                     position: "absolute",
@@ -3372,8 +3084,6 @@ export default function BCDeesLanding() {
                     <rect width="100%" height="100%" fill="url(#mesh)" />
                   </svg>
                 </div>
-
-                {/* Main card */}
                 <div
                   style={{
                     position: "relative",
@@ -3386,7 +3096,6 @@ export default function BCDeesLanding() {
                     boxShadow: "0 32px 80px rgba(0,0,0,.6)",
                   }}
                 >
-                  {/* Top accent bar */}
                   <div
                     style={{
                       height: 3,
@@ -3396,9 +3105,7 @@ export default function BCDeesLanding() {
                       animation: "shimmer 2s linear infinite",
                     }}
                   />
-
                   <div style={{ padding: "40px 36px" }}>
-                    {/* Header row */}
                     <div
                       style={{
                         display: "flex",
@@ -3432,7 +3139,6 @@ export default function BCDeesLanding() {
                           Escrow
                         </h3>
                       </div>
-                      {/* Animated lock */}
                       <div
                         style={{ position: "relative", width: 56, height: 56 }}
                       >
@@ -3461,10 +3167,7 @@ export default function BCDeesLanding() {
                         </div>
                       </div>
                     </div>
-
-                    {/* 3 escrow points — styled as timeline */}
                     <div style={{ position: "relative" }}>
-                      {/* Vertical line */}
                       <div
                         style={{
                           position: "absolute",
@@ -3476,7 +3179,6 @@ export default function BCDeesLanding() {
                             "linear-gradient(180deg,#3b82f6,rgba(37,99,235,.1))",
                         }}
                       />
-
                       {[
                         {
                           text: "Your NGN is securely locked before any FX is sent",
@@ -3500,7 +3202,6 @@ export default function BCDeesLanding() {
                             position: "relative",
                           }}
                         >
-                          {/* Timeline dot */}
                           <div
                             style={{
                               width: 23,
@@ -3552,8 +3253,6 @@ export default function BCDeesLanding() {
                         </div>
                       ))}
                     </div>
-
-                    {/* Bottom row — stars + live badge */}
                     <div
                       style={{
                         marginTop: 28,
@@ -3631,8 +3330,6 @@ export default function BCDeesLanding() {
         </div>
       </section>
 
-      <style>{`@keyframes shimmer{from{background-position:200% center}to{background-position:-200% center}}`}</style>
-
       {/* SERVICES */}
       <section
         id="services"
@@ -3670,8 +3367,6 @@ export default function BCDeesLanding() {
               </h2>
             </div>
           </Reveal>
-
-          {/* 2×2 grid — exact screenshot layout */}
           <div
             data-two
             style={{
@@ -3709,7 +3404,6 @@ export default function BCDeesLanding() {
                       (e.currentTarget.style.background = "#06101e")
                     }
                   >
-                    {/* Hover corner glow */}
                     <div
                       style={{
                         position: "absolute",
@@ -3723,8 +3417,6 @@ export default function BCDeesLanding() {
                         pointerEvents: "none",
                       }}
                     />
-
-                    {/* Animated illustration — top of card */}
                     <div
                       style={{
                         height: 108,
@@ -3735,8 +3427,6 @@ export default function BCDeesLanding() {
                     >
                       <Illustration />
                     </div>
-
-                    {/* Icon badge — matches screenshot exactly: rounded square */}
                     <div
                       style={{
                         width: 56,
@@ -3755,8 +3445,6 @@ export default function BCDeesLanding() {
                     >
                       <s.icon size={24} color="#60a5fa" strokeWidth={1.6} />
                     </div>
-
-                    {/* Title */}
                     <h3
                       style={{
                         fontSize: 20,
@@ -3770,14 +3458,11 @@ export default function BCDeesLanding() {
                     >
                       {s.title}
                     </h3>
-
-                    {/* Description */}
                     <p
                       style={{
                         fontSize: 14,
                         lineHeight: 1.75,
                         color: "rgba(148,163,184,.65)",
-                        marginBottom: 24,
                         position: "relative",
                         zIndex: 1,
                         flex: 1,
@@ -3785,33 +3470,6 @@ export default function BCDeesLanding() {
                     >
                       {s.desc}
                     </p>
-
-                    {/* Learn more — wired to Contact */}
-                    <button
-                      onClick={goCTA}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        padding: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        color: "#3b82f6",
-                        fontSize: 13,
-                        fontWeight: 700,
-                        letterSpacing: ".02em",
-                        fontFamily: "inherit",
-                        transition: "gap .2s",
-                        position: "relative",
-                        zIndex: 1,
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.gap = "10px")}
-                      onMouseLeave={(e) => (e.currentTarget.style.gap = "6px")}
-                    >
-                      Learn more
-                      <ChevronRight size={14} />
-                    </button>
                   </div>
                 </Reveal>
               );
@@ -3822,15 +3480,7 @@ export default function BCDeesLanding() {
 
       {/* CTA BANNER */}
       <section style={{ padding: "0 32px 80px", background: "#06101e" }}>
-        <style>{`
-          @keyframes ctaFloat0{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(-4deg)}}
-          @keyframes ctaFloat1{0%,100%{transform:translateY(0) rotate(5deg)}50%{transform:translateY(-10px) rotate(7deg)}}
-          @keyframes ctaFloat2{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(-5deg)}}
-          @keyframes ctaFloat3{0%,100%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(-8px) rotate(6deg)}}
-          @keyframes holoShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-          @keyframes holoGlow{0%,100%{opacity:.35}50%{opacity:.75}}
-          @keyframes ctaScan{0%{transform:translateY(-100%)}100%{transform:translateY(400%)}}
-        `}</style>
+        <style>{`@keyframes ctaFloat0{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-14px) rotate(-4deg)}}@keyframes ctaFloat1{0%,100%{transform:translateY(0) rotate(5deg)}50%{transform:translateY(-10px) rotate(7deg)}}@keyframes ctaFloat2{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(-5deg)}}@keyframes ctaFloat3{0%,100%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(-8px) rotate(6deg)}}@keyframes holoShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}@keyframes holoGlow{0%,100%{opacity:.35}50%{opacity:.75}}@keyframes ctaScan{0%{transform:translateY(-100%)}100%{transform:translateY(400%)}}`}</style>
         <Reveal>
           <div
             style={{
@@ -3842,16 +3492,12 @@ export default function BCDeesLanding() {
               padding: "60px 64px",
               position: "relative",
               overflow: "hidden",
-              display: "grid",
-              gridTemplateColumns: "1fr auto",
-              gap: 48,
-              alignItems: "center",
+              display: "block",
               border: "1px solid rgba(255,255,255,.08)",
               boxShadow: "0 40px 80px rgba(0,0,0,.5)",
             }}
             data-two
           >
-            {/* Dot grid */}
             <div
               style={{
                 position: "absolute",
@@ -3862,500 +3508,154 @@ export default function BCDeesLanding() {
                 pointerEvents: "none",
               }}
             />
-
-            {/* ── HOLOGRAPHIC FLOATING CURRENCY CARDS ── */}
-            {/* Card 1 — NGN — top left area */}
-            <div
-              style={{
-                position: "absolute",
-                top: -20,
-                left: 180,
-                animation: "ctaFloat0 6s ease-in-out infinite",
-                zIndex: 0,
-                pointerEvents: "none",
-              }}
-            >
+            {[
+              {
+                pos: { top: -20, left: 180 },
+                anim: "ctaFloat0 6s ease-in-out infinite",
+                code: "NGN",
+                acc: "NGN0958473843",
+                amt: "₦23,000",
+                iso: "ng",
+                w: 160,
+              },
+              {
+                pos: { top: -30, right: 220 },
+                anim: "ctaFloat2 7s ease-in-out infinite .8s",
+                code: "USD",
+                acc: "USD0847392011",
+                amt: "$12,800",
+                iso: "us",
+                w: 155,
+              },
+              {
+                pos: { bottom: -10, right: 100 },
+                anim: "ctaFloat1 5.5s ease-in-out infinite 1.2s",
+                code: "GBP",
+                acc: "GBP0392847561",
+                amt: "£8,450",
+                iso: "gb",
+                w: 150,
+              },
+              {
+                pos: { bottom: -15, left: 80 },
+                anim: "ctaFloat3 6.5s ease-in-out infinite .4s",
+                code: "EUR",
+                acc: "EUR0573920184",
+                amt: "€9,200",
+                iso: "eu",
+                w: 148,
+              },
+            ].map((c, i) => (
               <div
+                key={i}
                 style={{
-                  width: 160,
-                  borderRadius: 14,
-                  padding: "16px 18px 18px",
-                  background:
-                    "linear-gradient(135deg,rgba(15,37,84,.95),rgba(30,58,138,.9))",
-                  border: "1px solid rgba(255,255,255,.15)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,.5)",
-                  backdropFilter: "blur(12px)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                {/* Hologram shimmer */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    borderRadius: 14,
-                    background:
-                      "linear-gradient(105deg,transparent 30%,rgba(100,180,255,.12) 45%,rgba(150,220,255,.18) 50%,rgba(100,180,255,.1) 55%,transparent 70%)",
-                    backgroundSize: "200% 200%",
-                    animation: "holoShift 3s ease-in-out infinite",
-                    pointerEvents: "none",
-                  }}
-                />
-                {/* Scan line */}
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    height: 1,
-                    background:
-                      "linear-gradient(90deg,transparent,rgba(120,200,255,.4),transparent)",
-                    animation: "ctaScan 3s linear infinite",
-                    pointerEvents: "none",
-                  }}
-                />
-                {/* Holo glow behind card */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: -20,
-                    borderRadius: 30,
-                    background:
-                      "radial-gradient(ellipse,rgba(56,189,248,.3),transparent 70%)",
-                    animation: "holoGlow 3s ease-in-out infinite",
-                    zIndex: -1,
-                    filter: "blur(12px)",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    marginBottom: 12,
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 800,
-                        color: "rgba(255,255,255,.9)",
-                        letterSpacing: ".04em",
-                      }}
-                    >
-                      NGN
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 8,
-                        color: "rgba(255,255,255,.35)",
-                        marginTop: 2,
-                      }}
-                    >
-                      NGN0958473843
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      border: "1.5px solid rgba(255,255,255,.3)",
-                    }}
-                  >
-                    <img
-                      src="https://flagcdn.com/w40/ng.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 800,
-                    color: "#fff",
-                    letterSpacing: "-.03em",
-                  }}
-                >
-                  ₦23,000
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2 — USD — middle right floating high */}
-            <div
-              style={{
-                position: "absolute",
-                top: -30,
-                right: 220,
-                animation: "ctaFloat2 7s ease-in-out infinite .8s",
-                zIndex: 0,
-                pointerEvents: "none",
-              }}
-            >
-              <div
-                style={{
-                  width: 155,
-                  borderRadius: 14,
-                  padding: "15px 17px 17px",
-                  background:
-                    "linear-gradient(135deg,rgba(10,28,70,.95),rgba(20,50,120,.9))",
-                  border: "1px solid rgba(255,255,255,.12)",
-                  boxShadow: "0 12px 40px rgba(0,0,0,.5)",
-                  backdropFilter: "blur(12px)",
-                  position: "relative",
-                  overflow: "hidden",
+                  position: "absolute",
+                  ...c.pos,
+                  animation: c.anim,
+                  zIndex: 0,
+                  pointerEvents: "none",
                 }}
               >
                 <div
                   style={{
-                    position: "absolute",
-                    inset: 0,
+                    width: c.w,
                     borderRadius: 14,
+                    padding: "15px 17px 17px",
                     background:
-                      "linear-gradient(105deg,transparent 30%,rgba(200,230,255,.1) 48%,rgba(255,255,255,.15) 52%,transparent 68%)",
-                    backgroundSize: "200% 200%",
-                    animation: "holoShift 4s ease-in-out infinite .5s",
-                    pointerEvents: "none",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    height: 1,
-                    background:
-                      "linear-gradient(90deg,transparent,rgba(180,220,255,.35),transparent)",
-                    animation: "ctaScan 2.8s linear infinite .5s",
-                    pointerEvents: "none",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: -20,
-                    borderRadius: 30,
-                    background:
-                      "radial-gradient(ellipse,rgba(96,165,250,.25),transparent 70%)",
-                    animation: "holoGlow 4s ease-in-out infinite .3s",
-                    zIndex: -1,
-                    filter: "blur(12px)",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    marginBottom: 12,
+                      "linear-gradient(135deg,rgba(10,28,70,.95),rgba(20,50,120,.9))",
+                    border: "1px solid rgba(255,255,255,.12)",
+                    boxShadow: "0 12px 40px rgba(0,0,0,.5)",
+                    backdropFilter: "blur(12px)",
+                    position: "relative",
+                    overflow: "hidden",
                   }}
                 >
-                  <div>
-                    <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 800,
-                        color: "rgba(255,255,255,.9)",
-                        letterSpacing: ".04em",
-                      }}
-                    >
-                      USD
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      borderRadius: 14,
+                      background:
+                        "linear-gradient(105deg,transparent 30%,rgba(200,230,255,.1) 48%,rgba(255,255,255,.15) 52%,transparent 68%)",
+                      backgroundSize: "200% 200%",
+                      animation: `holoShift ${3 + i * 0.5}s ease-in-out infinite ${i * 0.3}s`,
+                      pointerEvents: "none",
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      right: 0,
+                      height: 1,
+                      background:
+                        "linear-gradient(90deg,transparent,rgba(180,220,255,.35),transparent)",
+                      animation: `ctaScan ${2.8 + i * 0.4}s linear infinite ${i * 0.4}s`,
+                      pointerEvents: "none",
+                    }}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: 12,
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 800,
+                          color: "rgba(255,255,255,.9)",
+                          letterSpacing: ".04em",
+                        }}
+                      >
+                        {c.code}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 8,
+                          color: "rgba(255,255,255,.35)",
+                          marginTop: 2,
+                        }}
+                      >
+                        {c.acc}
+                      </div>
                     </div>
                     <div
                       style={{
-                        fontSize: 8,
-                        color: "rgba(255,255,255,.35)",
-                        marginTop: 2,
+                        width: 28,
+                        height: 28,
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        border: "1.5px solid rgba(255,255,255,.3)",
                       }}
                     >
-                      USD0847392011
+                      <img
+                        src={`https://flagcdn.com/w40/${c.iso}.png`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        alt={c.iso}
+                      />
                     </div>
                   </div>
                   <div
                     style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      border: "1.5px solid rgba(255,255,255,.3)",
+                      fontSize: 20,
+                      fontWeight: 800,
+                      color: "#fff",
+                      letterSpacing: "-.03em",
                     }}
                   >
-                    <img
-                      src="https://flagcdn.com/w40/us.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
+                    {c.amt}
                   </div>
-                </div>
-                <div
-                  style={{
-                    fontSize: 21,
-                    fontWeight: 800,
-                    color: "#fff",
-                    letterSpacing: "-.03em",
-                  }}
-                >
-                  $12,800
                 </div>
               </div>
-            </div>
-
-            {/* Card 3 — GBP — bottom right */}
-            <div
-              style={{
-                position: "absolute",
-                bottom: -10,
-                right: 100,
-                animation: "ctaFloat1 5.5s ease-in-out infinite 1.2s",
-                zIndex: 0,
-                pointerEvents: "none",
-              }}
-            >
-              <div
-                style={{
-                  width: 150,
-                  borderRadius: 14,
-                  padding: "15px 17px 17px",
-                  background:
-                    "linear-gradient(135deg,rgba(12,30,80,.95),rgba(25,55,130,.9))",
-                  border: "1px solid rgba(255,255,255,.1)",
-                  boxShadow: "0 12px 36px rgba(0,0,0,.5)",
-                  backdropFilter: "blur(12px)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    borderRadius: 14,
-                    background:
-                      "linear-gradient(105deg,transparent 30%,rgba(140,200,255,.1) 47%,rgba(200,240,255,.16) 53%,transparent 70%)",
-                    backgroundSize: "200% 200%",
-                    animation: "holoShift 3.5s ease-in-out infinite 1s",
-                    pointerEvents: "none",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    height: 1,
-                    background:
-                      "linear-gradient(90deg,transparent,rgba(160,210,255,.35),transparent)",
-                    animation: "ctaScan 3.2s linear infinite 1s",
-                    pointerEvents: "none",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: -20,
-                    borderRadius: 30,
-                    background:
-                      "radial-gradient(ellipse,rgba(14,165,233,.22),transparent 70%)",
-                    animation: "holoGlow 3.5s ease-in-out infinite .7s",
-                    zIndex: -1,
-                    filter: "blur(12px)",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    marginBottom: 12,
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 800,
-                        color: "rgba(255,255,255,.9)",
-                        letterSpacing: ".04em",
-                      }}
-                    >
-                      GBP
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 8,
-                        color: "rgba(255,255,255,.35)",
-                        marginTop: 2,
-                      }}
-                    >
-                      GBP0392847561
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      border: "1.5px solid rgba(255,255,255,.3)",
-                    }}
-                  >
-                    <img
-                      src="https://flagcdn.com/w40/gb.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontSize: 21,
-                    fontWeight: 800,
-                    color: "#fff",
-                    letterSpacing: "-.03em",
-                  }}
-                >
-                  £8,450
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4 — EUR — bottom left */}
-            <div
-              style={{
-                position: "absolute",
-                bottom: -15,
-                left: 80,
-                animation: "ctaFloat3 6.5s ease-in-out infinite .4s",
-                zIndex: 0,
-                pointerEvents: "none",
-              }}
-            >
-              <div
-                style={{
-                  width: 148,
-                  borderRadius: 14,
-                  padding: "14px 16px 16px",
-                  background:
-                    "linear-gradient(135deg,rgba(14,32,88,.95),rgba(28,58,140,.9))",
-                  border: "1px solid rgba(255,255,255,.1)",
-                  boxShadow: "0 10px 32px rgba(0,0,0,.5)",
-                  backdropFilter: "blur(12px)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    borderRadius: 14,
-                    background:
-                      "linear-gradient(105deg,transparent 30%,rgba(100,170,255,.09) 47%,rgba(160,220,255,.15) 52%,transparent 70%)",
-                    backgroundSize: "200% 200%",
-                    animation: "holoShift 5s ease-in-out infinite 1.5s",
-                    pointerEvents: "none",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    height: 1,
-                    background:
-                      "linear-gradient(90deg,transparent,rgba(140,200,255,.3),transparent)",
-                    animation: "ctaScan 4s linear infinite 1.5s",
-                    pointerEvents: "none",
-                  }}
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: -20,
-                    borderRadius: 30,
-                    background:
-                      "radial-gradient(ellipse,rgba(37,99,235,.2),transparent 70%)",
-                    animation: "holoGlow 5s ease-in-out infinite 1s",
-                    zIndex: -1,
-                    filter: "blur(12px)",
-                  }}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    marginBottom: 12,
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 800,
-                        color: "rgba(255,255,255,.9)",
-                        letterSpacing: ".04em",
-                      }}
-                    >
-                      EUR
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 8,
-                        color: "rgba(255,255,255,.35)",
-                        marginTop: 2,
-                      }}
-                    >
-                      EUR0573920184
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      border: "1.5px solid rgba(255,255,255,.3)",
-                    }}
-                  >
-                    <img
-                      src="https://flagcdn.com/w40/eu.png"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 800,
-                    color: "#fff",
-                    letterSpacing: "-.03em",
-                  }}
-                >
-                  €9,200
-                </div>
-              </div>
-            </div>
-
-            {/* Content — sits above cards */}
+            ))}
             <div style={{ position: "relative", zIndex: 2 }}>
               <h2
                 style={{
@@ -4382,73 +3682,6 @@ export default function BCDeesLanding() {
                 Join thousands of Nigerians who already trade smart, simple, and
                 safe on BCDees.
               </p>
-            </div>
-
-            {/* Buttons — right side */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
-                flexShrink: 0,
-                position: "relative",
-                zIndex: 2,
-              }}
-            >
-              <button
-                onClick={goCTA}
-                style={{
-                  background: "#fff",
-                  color: "#1e3a8a",
-                  border: "none",
-                  padding: "15px 32px",
-                  borderRadius: 12,
-                  fontFamily: "inherit",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  transition: "all .25s",
-                  boxShadow: "0 4px 20px rgba(0,0,0,.2)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#e0e7ff";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "#fff";
-                  e.currentTarget.style.transform = "none";
-                }}
-              >
-                Create Free Account
-              </button>
-              <button
-                onClick={goCTA}
-                style={{
-                  background: "rgba(255,255,255,.1)",
-                  color: "rgba(255,255,255,.9)",
-                  border: "1px solid rgba(255,255,255,.2)",
-                  padding: "14px 32px",
-                  borderRadius: 12,
-                  fontFamily: "inherit",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  transition: "all .25s",
-                  backdropFilter: "blur(8px)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(255,255,255,.18)";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(255,255,255,.1)";
-                  e.currentTarget.style.transform = "none";
-                }}
-              >
-                Browse Marketplace
-              </button>
             </div>
           </div>
         </Reveal>
@@ -4491,7 +3724,6 @@ export default function BCDeesLanding() {
               </h2>
             </div>
           </Reveal>
-
           <div
             style={{
               display: "grid",
@@ -4501,292 +3733,138 @@ export default function BCDeesLanding() {
               margin: "0 auto",
             }}
           >
-            {/* ADDRESS — opens Google Maps */}
-            <Reveal delay={0}>
-              <a
-                href="https://maps.google.com/?q=20+Aso+Rock+St,+Abule+Ijoko,+Ogun+State,+Nigeria"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "none", display: "block" }}
-              >
-                <div
-                  style={{
-                    background: "rgba(255,255,255,.03)",
-                    border: "1px solid rgba(37,99,235,.14)",
-                    borderRadius: 20,
-                    padding: "40px 28px 36px",
-                    textAlign: "center",
-                    transition: "all .35s",
-                    cursor: "pointer",
-                    height: "100%",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(37,99,235,.08)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,.35)";
-                    e.currentTarget.style.transform = "translateY(-5px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 20px 48px rgba(0,0,0,.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,.03)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,.14)";
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
+            {[
+              {
+                icon: MapPin,
+                label: "Address",
+                value: "20 Aso Rock St, Abule Ijoko, Ogun State, Nigeria.",
+                action: "Open in Maps",
+                href: "https://maps.google.com/?q=20+Aso+Rock+St,+Abule+Ijoko,+Ogun+State,+Nigeria",
+              },
+              {
+                icon: Mail,
+                label: "Email",
+                value: "info@bcdees.com",
+                action: "Send Email",
+                href: "mailto:info@bcdees.com",
+              },
+              {
+                icon: Phone,
+                label: "Phone",
+                value: "+234 803 411 5756",
+                action: "Call Now",
+                href: "tel:+2348034115756",
+              },
+            ].map((c, i) => (
+              <Reveal key={c.label} delay={i * 0.1}>
+                <a
+                  href={c.href}
+                  target={c.href.startsWith("https") ? "_blank" : undefined}
+                  rel={
+                    c.href.startsWith("https")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  style={{ textDecoration: "none", display: "block" }}
                 >
                   <div
                     style={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: 18,
-                      background: "rgba(37,99,235,.15)",
-                      border: "1px solid rgba(37,99,235,.25)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 20px",
-                      boxShadow: "0 4px 16px rgba(37,99,235,.2)",
+                      background: "rgba(255,255,255,.03)",
+                      border: "1px solid rgba(37,99,235,.14)",
+                      borderRadius: 20,
+                      padding: "40px 28px 36px",
+                      textAlign: "center",
+                      transition: "all .35s",
+                      cursor: "pointer",
+                      height: "100%",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(37,99,235,.08)";
+                      e.currentTarget.style.borderColor = "rgba(37,99,235,.35)";
+                      e.currentTarget.style.transform = "translateY(-5px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 20px 48px rgba(0,0,0,.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(255,255,255,.03)";
+                      e.currentTarget.style.borderColor = "rgba(37,99,235,.14)";
+                      e.currentTarget.style.transform = "none";
+                      e.currentTarget.style.boxShadow = "none";
                     }}
                   >
-                    <MapPin size={26} color="#60a5fa" strokeWidth={1.6} />
+                    <div
+                      style={{
+                        width: 64,
+                        height: 64,
+                        borderRadius: 18,
+                        background: "rgba(37,99,235,.15)",
+                        border: "1px solid rgba(37,99,235,.25)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        margin: "0 auto 20px",
+                        boxShadow: "0 4px 16px rgba(37,99,235,.2)",
+                      }}
+                    >
+                      <c.icon size={26} color="#60a5fa" strokeWidth={1.6} />
+                    </div>
+                    <p
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 800,
+                        letterSpacing: ".14em",
+                        textTransform: "uppercase",
+                        color: "rgba(96,165,250,.55)",
+                        marginBottom: 12,
+                      }}
+                    >
+                      {c.label}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: c.label === "Address" ? 14 : 15,
+                        color:
+                          c.label === "Address"
+                            ? "rgba(148,163,184,.75)"
+                            : "#e2e8f0",
+                        lineHeight: 1.65,
+                        fontWeight: c.label === "Address" ? 400 : 600,
+                      }}
+                    >
+                      {c.value}
+                    </p>
+                    <div
+                      style={{
+                        marginTop: 16,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 5,
+                        color: "#3b82f6",
+                        fontSize: 12,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {c.action}
+                      <svg
+                        viewBox="0 0 14 14"
+                        width="11"
+                        height="11"
+                        fill="none"
+                      >
+                        <path
+                          d="M3 7h8M7 3l4 4-4 4"
+                          stroke="#3b82f6"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
                   </div>
-                  <p
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      letterSpacing: ".14em",
-                      textTransform: "uppercase",
-                      color: "rgba(96,165,250,.55)",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Address
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 14,
-                      color: "rgba(148,163,184,.75)",
-                      lineHeight: 1.65,
-                      fontWeight: 400,
-                    }}
-                  >
-                    20 Aso Rock St, Abule Ijoko, Ogun State, Nigeria.
-                  </p>
-                  <div
-                    style={{
-                      marginTop: 16,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 5,
-                      color: "#3b82f6",
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    Open in Maps
-                    <svg viewBox="0 0 14 14" width="11" height="11" fill="none">
-                      <path
-                        d="M3 7h8M7 3l4 4-4 4"
-                        stroke="#3b82f6"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </Reveal>
-
-            {/* EMAIL — opens mail client */}
-            <Reveal delay={0.1}>
-              <a
-                href="mailto:info@bcdees.com"
-                style={{ textDecoration: "none", display: "block" }}
-              >
-                <div
-                  style={{
-                    background: "rgba(255,255,255,.03)",
-                    border: "1px solid rgba(37,99,235,.14)",
-                    borderRadius: 20,
-                    padding: "40px 28px 36px",
-                    textAlign: "center",
-                    transition: "all .35s",
-                    cursor: "pointer",
-                    height: "100%",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(37,99,235,.08)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,.35)";
-                    e.currentTarget.style.transform = "translateY(-5px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 20px 48px rgba(0,0,0,.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,.03)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,.14)";
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: 18,
-                      background: "rgba(37,99,235,.15)",
-                      border: "1px solid rgba(37,99,235,.25)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 20px",
-                      boxShadow: "0 4px 16px rgba(37,99,235,.2)",
-                    }}
-                  >
-                    <Mail size={26} color="#60a5fa" strokeWidth={1.6} />
-                  </div>
-                  <p
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      letterSpacing: ".14em",
-                      textTransform: "uppercase",
-                      color: "rgba(96,165,250,.55)",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Email
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 15,
-                      color: "#e2e8f0",
-                      lineHeight: 1.5,
-                      fontWeight: 600,
-                    }}
-                  >
-                    info@bcdees.com
-                  </p>
-                  <div
-                    style={{
-                      marginTop: 16,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 5,
-                      color: "#3b82f6",
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    Send Email
-                    <svg viewBox="0 0 14 14" width="11" height="11" fill="none">
-                      <path
-                        d="M3 7h8M7 3l4 4-4 4"
-                        stroke="#3b82f6"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </Reveal>
-
-            {/* PHONE — opens dialer */}
-            <Reveal delay={0.2}>
-              <a
-                href="tel:+2348034115756"
-                style={{ textDecoration: "none", display: "block" }}
-              >
-                <div
-                  style={{
-                    background: "rgba(255,255,255,.03)",
-                    border: "1px solid rgba(37,99,235,.14)",
-                    borderRadius: 20,
-                    padding: "40px 28px 36px",
-                    textAlign: "center",
-                    transition: "all .35s",
-                    cursor: "pointer",
-                    height: "100%",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(37,99,235,.08)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,.35)";
-                    e.currentTarget.style.transform = "translateY(-5px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 20px 48px rgba(0,0,0,.3)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,.03)";
-                    e.currentTarget.style.borderColor = "rgba(37,99,235,.14)";
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: 18,
-                      background: "rgba(37,99,235,.15)",
-                      border: "1px solid rgba(37,99,235,.25)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 20px",
-                      boxShadow: "0 4px 16px rgba(37,99,235,.2)",
-                    }}
-                  >
-                    <Phone size={26} color="#60a5fa" strokeWidth={1.6} />
-                  </div>
-                  <p
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      letterSpacing: ".14em",
-                      textTransform: "uppercase",
-                      color: "rgba(96,165,250,.55)",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Phone
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 15,
-                      color: "#e2e8f0",
-                      lineHeight: 1.5,
-                      fontWeight: 600,
-                    }}
-                  >
-                    +234 803 411 5756
-                  </p>
-                  <div
-                    style={{
-                      marginTop: 16,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 5,
-                      color: "#3b82f6",
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    Call Now
-                    <svg viewBox="0 0 14 14" width="11" height="11" fill="none">
-                      <path
-                        d="M3 7h8M7 3l4 4-4 4"
-                        stroke="#3b82f6"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </Reveal>
+                </a>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -4800,7 +3878,6 @@ export default function BCDeesLanding() {
           position: "relative",
         }}
       >
-        {/* Top bar — logo + nav + links */}
         <div
           style={{ maxWidth: 960, margin: "0 auto", padding: "40px 32px 28px" }}
         >
@@ -4812,44 +3889,31 @@ export default function BCDeesLanding() {
               flexWrap: "wrap",
               gap: 20,
               paddingBottom: 28,
-              borderBottom: "1px solid rgba(255,255,255,.05)",
+              borderBottom: "1px solid rgba(255,255,255,.08)",
             }}
           >
-            {/* Logo */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <div
                 style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 9,
-                  background: "linear-gradient(135deg,#2563EB,#0ea5e9)",
+                  background: "#fff",
+                  borderRadius: 99,
+                  padding: "4px 16px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 4px 12px rgba(37,99,235,.3)",
+                  height: 44,
                 }}
               >
                 <Image
                   src="/logo.png"
                   alt="BCDees"
-                  width={19}
-                  height={19}
-                  className="object-contain brightness-0 invert"
+                  width={150}
+                  height={36}
+                  className="object-contain"
+                  style={{ height: 36, width: "auto" }}
                 />
               </div>
-              <span
-                style={{
-                  fontSize: 17,
-                  fontWeight: 800,
-                  color: "#f1f5f9",
-                  letterSpacing: "-.02em",
-                }}
-              >
-                <span style={{ color: "#3b82f6" }}>BC</span>Dees
-              </span>
             </div>
-
-            {/* Nav links */}
             <nav style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
               {NAV.map((l) => (
                 <button
@@ -4861,25 +3925,21 @@ export default function BCDeesLanding() {
                     cursor: "pointer",
                     fontSize: 13,
                     fontWeight: 500,
-                    color: "rgba(148,163,184,.4)",
+                    color: "rgba(255,255,255,.75)",
                     fontFamily: "inherit",
                     padding: "6px 14px",
                     borderRadius: 8,
                     transition: "all .2s",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "#93c5fd")
-                  }
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
                   onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "rgba(148,163,184,.4)")
+                    (e.currentTarget.style.color = "rgba(255,255,255,.75)")
                   }
                 >
                   {l}
                 </button>
               ))}
             </nav>
-
-            {/* Legal links */}
             <div style={{ display: "flex", gap: 20 }}>
               {["Privacy Policy", "Terms of Service"].map((l) => (
                 <a
@@ -4887,7 +3947,7 @@ export default function BCDeesLanding() {
                   href="#"
                   style={{
                     fontSize: 12,
-                    color: "rgba(148,163,184,.22)",
+                    color: "rgba(255,255,255,.45)",
                     textDecoration: "none",
                     transition: "color .2s",
                   }}
@@ -4895,7 +3955,7 @@ export default function BCDeesLanding() {
                     (e.currentTarget.style.color = "#60a5fa")
                   }
                   onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "rgba(148,163,184,.22)")
+                    (e.currentTarget.style.color = "rgba(255,255,255,.45)")
                   }
                 >
                   {l}
@@ -4903,8 +3963,6 @@ export default function BCDeesLanding() {
               ))}
             </div>
           </div>
-
-          {/* Copyright + back to top */}
           <div
             style={{
               paddingTop: 18,
@@ -4918,7 +3976,7 @@ export default function BCDeesLanding() {
             <p
               style={{
                 fontSize: 11,
-                color: "rgba(148,163,184,.18)",
+                color: "rgba(255,255,255,.45)",
                 letterSpacing: ".07em",
                 textTransform: "uppercase",
                 fontWeight: 600,
@@ -4936,7 +3994,7 @@ export default function BCDeesLanding() {
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                color: "rgba(148,163,184,.3)",
+                color: "rgba(255,255,255,.55)",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: ".1em",
@@ -4947,7 +4005,7 @@ export default function BCDeesLanding() {
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#60a5fa")}
               onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(148,163,184,.3)")
+                (e.currentTarget.style.color = "rgba(255,255,255,.55)")
               }
             >
               <svg viewBox="0 0 12 12" width="12" height="12" fill="none">
@@ -4963,38 +4021,12 @@ export default function BCDeesLanding() {
             </button>
           </div>
         </div>
-
-        {/* ── GIANT WATERMARK NAME — Pesa style: solid dark, bottom-cropped, holo glow on hover ── */}
-        <style>{`
-          .footer-wordmark {
-            font-size: clamp(120px, 20vw, 280px);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 0.82;
-            color: #0e1a2e;
-            display: block;
-            white-space: nowrap;
-            text-align: center;
-            user-select: none;
-            cursor: default;
-            transition: color 0.6s ease, text-shadow 0.6s ease;
-            position: relative;
-          }
-          .footer-wordmark:hover {
-            color: #0e1a2e;
-            text-shadow:
-              0 0 40px rgba(56,189,248,0.55),
-              0 0 80px rgba(37,99,235,0.4),
-              0 0 120px rgba(14,165,233,0.25),
-              0 0 200px rgba(37,99,235,0.15);
-          }
-        `}</style>
+        <style>{`.footer-wordmark{font-size:clamp(120px,20vw,280px);font-weight:900;letter-spacing:-0.04em;line-height:0.82;color:#0e1a2e;display:block;white-space:nowrap;text-align:center;user-select:none;cursor:default;transition:color 0.6s ease,text-shadow 0.6s ease;position:relative}.footer-wordmark:hover{color:#0e1a2e;text-shadow:0 0 40px rgba(56,189,248,.55),0 0 80px rgba(37,99,235,.4),0 0 120px rgba(14,165,233,.25),0 0 200px rgba(37,99,235,.15)}`}</style>
         <div
           style={{
             overflow: "hidden",
             marginTop: 8,
-            /* crop ~35% off the bottom so text hides below fold like Pesa */
-            height: "clamp(70px, 11vw, 160px)",
+            height: "clamp(70px,11vw,160px)",
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "center",
@@ -5004,7 +4036,6 @@ export default function BCDeesLanding() {
         </div>
       </footer>
 
-      {/* Floating go-to-top button — appears when scrolled */}
       {scrolled && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

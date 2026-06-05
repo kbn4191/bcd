@@ -3941,7 +3941,7 @@ export default function BCDeesLanding() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: 20 }}>
-              {["Privacy Policy", "Terms of Service"].map((l) => (
+              {["Privacy Policy", "Terms of Service", "AML Policy"].map((l) => (
                 <a
                   key={l}
                   href="#"
@@ -3983,7 +3983,6 @@ export default function BCDeesLanding() {
               }}
             >
               © {new Date().getFullYear()} BCDees Global. All rights reserved.
-              Built for Nigeria.
             </p>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -4022,6 +4021,37 @@ export default function BCDeesLanding() {
           </div>
         </div>
         <style>{`.footer-wordmark{font-size:clamp(120px,20vw,280px);font-weight:900;letter-spacing:-0.04em;line-height:0.82;color:#0e1a2e;display:block;white-space:nowrap;text-align:center;user-select:none;cursor:default;transition:color 0.6s ease,text-shadow 0.6s ease;position:relative}.footer-wordmark:hover{color:#0e1a2e;text-shadow:0 0 40px rgba(56,189,248,.55),0 0 80px rgba(37,99,235,.4),0 0 120px rgba(14,165,233,.25),0 0 200px rgba(37,99,235,.15)}`}</style>
+        {/* DISCLAIMER */}
+        <div
+          style={{
+            marginTop: 24,
+            padding: "20px 28px",
+            background: "rgba(37,99,235,.05)",
+            border: "1px solid rgba(37,99,235,.12)",
+            borderRadius: 14,
+            textAlign: "center",
+          }}
+        >
+          <p
+            className="text-slate-300"
+            style={{
+              fontSize: 11,
+              lineHeight: 1.8,
+
+              maxWidth: 780,
+              margin: "0 auto",
+              letterSpacing: ".01em",
+            }}
+          >
+            {`  Bcdees Global is not a bank or a deposit-taking institution. Users'
+            funds are held with regulated third-party financial institutions and
+            custodians, in segregated accounts where applicable, in accordance
+            with contractual arrangements and applicable regulatory
+            requirements. Bcdees Global does not use client funds for its own
+            account. Client funds are protected by the applicable deposit
+            insurance of the regulated third-party financial institutions.`}
+          </p>
+        </div>
         <div
           style={{
             overflow: "hidden",
